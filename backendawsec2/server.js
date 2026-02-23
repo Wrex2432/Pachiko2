@@ -610,7 +610,7 @@ wss.on("connection", (ws) => {
         teamIndex: null, // will be filled by adapter
         preferredTeamIndex:
           session.gameType === "facechinko" && Number.isFinite(parseInt(teamId, 10))
-            ? Math.max(0, Math.min(13, parseInt(teamId, 10) - 1))
+            ? Math.max(0, Math.min(adapters.facechinko.teamDefinitions.length - 1, parseInt(teamId, 10) - 1))
             : null,
         facechinkoUid: session.gameType === "facechinko" ? (uid || "").trim() : null,
         resumeToken,

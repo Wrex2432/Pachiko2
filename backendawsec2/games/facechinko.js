@@ -134,7 +134,7 @@ function upsertPlayer(st, player) {
   // IMPORTANT: Preserve existing teamIndex unless caller explicitly provided one.
   const hasIncomingTeam = Number.isInteger(player.teamIndex);
   const teamIndex = hasIncomingTeam
-    ? Math.max(0, Math.min(13, player.teamIndex))
+    ? Math.max(0, Math.min(FACECHINKO_TEAMS.length - 1, player.teamIndex))
     : existing
       ? existing.teamIndex
       : 0;
@@ -293,12 +293,12 @@ module.exports = {
     }
 
     if (payload.kind === "gameOver") {
-      // Accept either winningTeamIndex (0-13) or winningTeamId (1-14)
+      // Accept either winningTeamIndex (0-based) or winningTeamId (1-based)
       let wIdx = null;
       if (Number.isInteger(payload.winningTeamIndex)) wIdx = payload.winningTeamIndex;
       else if (Number.isFinite(Number(payload.winningTeamId))) wIdx = Number(payload.winningTeamId) - 1;
 
-      if (Number.isInteger(wIdx)) wIdx = Math.max(0, Math.min(13, wIdx));
+      if (Number.isInteger(wIdx)) wIdx = Math.max(0, Math.min(FACECHINKO_TEAMS.length - 1, wIdx));
       else wIdx = null;
 
       st.winningTeamIndex = wIdx;
@@ -325,7 +325,7 @@ module.exports = {
 
   registerWebPlayer(session, { uid, name, teamId }) {
     const st = ensureState(session);
-    const teamIndex = Math.max(0, Math.min(13, Number(teamId) - 1));
+    const teamIndex = Math.max(0, Math.min(FACECHINKO_TEAMS.length - 1, Number(teamId) - 1));
     const player = upsertPlayer(st, {
       uid,
       name,
