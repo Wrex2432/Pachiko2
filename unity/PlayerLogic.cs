@@ -78,6 +78,63 @@ public class PlayerLogic : MonoBehaviour
         // Collision rule is global; no need to change per player on Init.
     }
 
+    public static void SetGlobalBallToBallCollisionEnabled(bool enabled)
+    {
+        GlobalBallToBallCollisionEnabled = enabled;
+
+        for (int i = 0; i < AllBallColliders.Count; i++)
+        {
+            var a = AllBallColliders[i];
+            if (a == null) continue;
+
+            for (int j = i + 1; j < AllBallColliders.Count; j++)
+            {
+                var b = AllBallColliders[j];
+                if (b == null) continue;
+
+                Physics.IgnoreCollision(a, b, !enabled);
+            }
+        }
+    }
+
+    public static void ToggleGlobalBallToBallCollision()
+    {
+        SetGlobalBallToBallCollisionEnabled(!GlobalBallToBallCollisionEnabled);
+    }
+
+    private void RegisterCollider()
+    {
+        if (myCollider == null) myCollider = GetComponentInChildren<Collider>();
+        if (myCollider == null) return;
+        if (!AllBallColliders.Contains(myCollider)) AllBallColliders.Add(myCollider);
+    }
+
+    private void UnregisterCollider()
+    {
+        if (myCollider == null) return;
+
+        for (int i = 0; i < AllBallColliders.Count; i++)
+        {
+            var other = AllBallColliders[i];
+            if (other == null || other == myCollider) continue;
+            Physics.IgnoreCollision(myCollider, other, false);
+        }
+
+        AllBallColliders.Remove(myCollider);
+    }
+
+    private void ApplyCollisionRuleForThisCollider()
+    {
+        if (myCollider == null) return;
+
+        for (int i = 0; i < AllBallColliders.Count; i++)
+        {
+            var other = AllBallColliders[i];
+            if (other == null || other == myCollider) continue;
+            Physics.IgnoreCollision(myCollider, other, !GlobalBallToBallCollisionEnabled);
+        }
+    }
+
     private void RefreshVisuals()
     {
         if (ballRenderer == null) ballRenderer = GetComponentInChildren<Renderer>();
