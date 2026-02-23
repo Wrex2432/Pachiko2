@@ -88,19 +88,19 @@ function ensureState(session) {
 }
 
 const FACECHINKO_TEAMS = [
-  { name: "Team Dana & Greggy", color: "#FFA500" },
-  { name: "Team Mond & Saeid", color: "#008000" },
-  { name: "Team Jill & Alvin", color: "#0000FF" },
-  { name: "Team Sam & Ninya", color: "#800080" },
-  { name: "Team Ynna", color: "#FFDF00" },
-  { name: "Team Jasper", color: "#4B0082" },
+  { name: "Team Dana & Greggy", color: "orange" },
+  { name: "Team Mond & Saeid", color: "green" },
+  { name: "Team Jill & Alvin", color: "blue" },
+  { name: "Team Sam & Ninya", color: "purple" },
+  { name: "Team Ynna", color: "yellow" },
+  { name: "Team Jasper", color: "indigo" },
   { name: "Team Jordy", color: "#00A86B" },
-  { name: "Team MEDIA", color: "#FFEFD5" },
-  { name: "Team STRAT", color: "#4169E1" },
+  { name: "Team MEDIA", color: "papayawhip" },
+  { name: "Team STRAT", color: "royalblue" },
   { name: "Team HR & ADMIN", color: "#F4D23C" },
-  { name: "Team FINANCE", color: "#32CD32" },
+  { name: "Team FINANCE", color: "limegreen" },
   { name: "Team Micco", color: "#89CFF0" },
-  { name: "Team Bev", color: "#FF0000" },
+  { name: "Team Bev", color: "red" },
 ].map((team, idx) => ({ teamId: idx + 1, ...team }));
 
 function rosterSnapshot(session) {

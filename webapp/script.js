@@ -1,6 +1,6 @@
 /* Facechinko Web App (single-page)
    - Join (code + name) -> validate via HTTP /game-status
-   - Team select (14 teams)
+   - Team select (13 teams)
    - Register via WebSocket playerJoin (with teamIndex)
    - Waiting with ball preview
    - Result on gameResult (win team shows MVP name)
@@ -13,7 +13,23 @@
  *  ========================= */
 const WS_URL = "wss://api.prologuebymetama.com/ws";
 const GAME_TYPE = "facechinko";
-const TEAM_COUNT = 14;
+const TEAM_DEFINITIONS = [
+  { name: "Team Dana & Greggy", color: "orange" },
+  { name: "Team Mond & Saeid", color: "green" },
+  { name: "Team Jill & Alvin", color: "blue" },
+  { name: "Team Sam & Ninya", color: "purple" },
+  { name: "Team Ynna", color: "yellow" },
+  { name: "Team Jasper", color: "indigo" },
+  { name: "Team Jordy", color: "#00A86B" },
+  { name: "Team MEDIA", color: "papayawhip" },
+  { name: "Team STRAT", color: "royalblue" },
+  { name: "Team HR & ADMIN", color: "#F4D23C" },
+  { name: "Team FINANCE", color: "limegreen" },
+  { name: "Team Micco", color: "#89CFF0" },
+  { name: "Team Bev", color: "red" }
+];
+
+const TEAM_COUNT = TEAM_DEFINITIONS.length;
 
 // Derived HTTP base (used for /game-status validation)
 const HTTP_BASE = wsToHttpBase(WS_URL); // e.g. https://api.prologuebymetama.com
@@ -25,15 +41,8 @@ const K_SESSION = "fc.session"; // { code, name, teamIndex, resumeToken, phase, 
 /** =========================
  *  TEAM DATA
  *  ========================= */
-const TEAM_COLORS = [
-  "rgb(242,66,54)",  "rgb(232,31,99)",  "rgb(156,39,176)", "rgb(102,59,184)",
-  "rgb(64,82,181)",  "rgb(33,150,243)", "rgb(3,169,244)",  "rgb(0,188,212)",
-  "rgb(0,151,136)",  "rgb(76,175,80)",  "rgb(140,194,74)", "rgb(255,153,0)",
-  "rgb(255,87,34)",  "rgb(120,84,71)"
-];
-
 function teamLabel(teamIndex) {
-  return `TEAM ${teamIndex + 1}`;
+  return TEAM_DEFINITIONS[teamIndex]?.name || `TEAM ${teamIndex + 1}`;
 }
 
 /** =========================
@@ -159,7 +168,7 @@ function renderTeamGrid() {
 
     const swatch = document.createElement("div");
     swatch.className = "team-swatch";
-    swatch.style.background = TEAM_COLORS[i];
+    swatch.style.background = TEAM_DEFINITIONS[i].color;
 
     const name = document.createElement("div");
     name.className = "team-name";
@@ -523,7 +532,7 @@ function setError(el, msg) {
 function applyBallPreview(name, teamIndex) {
   BallName.textContent = name || "—";
   BallTeam.textContent = teamLabel(teamIndex);
-  BallPreview.style.background = TEAM_COLORS[teamIndex] || "rgba(255,255,255,0.12)";
+  BallPreview.style.background = TEAM_DEFINITIONS[teamIndex]?.color || "rgba(255,255,255,0.12)";
 }
 
 function showResult(winningTeamIndex, mvpName) {
